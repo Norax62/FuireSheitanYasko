@@ -10,7 +10,7 @@ let playerPos = { x: 50, y: 50 };
 let monsterPos = { x: 700, y: 500 };
 let score = 0;
 const playerSpeed = 15;
-const monsterSpeed = 0;
+const monsterSpeed = 1;
 const miniYaskoCount = 10;
 let miniYaskos = [];
 
@@ -80,8 +80,8 @@ function moveMonsterTowardsPlayer() {
 
   // Calcul du mouvement du monstre en direction du joueur
   if (distance > 1) {
-    monsterPos.x += (dx / distance) * monsterSpeed;
-    monsterPos.y += (dy / distance) * monsterSpeed;
+    monsterPos.x += (dx / distance);
+    monsterPos.y += (dy / distance);
   }
 
   monster.style.left = monsterPos.x + 'px';

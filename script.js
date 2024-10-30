@@ -56,6 +56,40 @@ document.addEventListener('keydown', (e) => {
   checkMiniYaskoCollision();
 });
 
+// Événements tactiles pour le contrôle du joueur
+gameArea.addEventListener('touchstart', (e) => {
+  const touch = e.touches[0];
+  handleTouch(touch);
+});
+
+gameArea.addEventListener('touchmove', (e) => {
+  const touch = e.touches[0];
+  handleTouch(touch);
+});
+
+// Gérer le mouvement en fonction du toucher
+function handleTouch(touch) {
+  const rect = gameArea.getBoundingClientRect();
+  const touchX = touch.clientX - rect.left;
+  const touchY = touch.clientY - rect.top;
+
+  // Déterminer la direction du mouvement
+  if (touchY < playerPos.y) {
+    playerPos.y = Math.max(playerPos.y - playerSpeed, 0); // Aller en haut
+  } else if (touchY > playerPos.y + player.clientHeight) {
+    playerPos.y = Math.min(playerPos.y + playerSpeed, gameArea.clientHeight - player.clientHeight); // Aller en bas
+  }
+
+  if (touchX < playerPos.x) {
+    playerPos.x = Math.max(playerPos.x - playerSpeed, 0); // Aller à gauche
+  } else if (touchX > playerPos.x + player.clientWidth) {
+    playerPos.x = Math.min(playerPos.x + playerSpeed, gameArea.clientWidth - player.clientWidth); // Aller à droite
+  }
+
+  updatePlayerPosition();
+  checkMiniYaskoCollision();
+}
+
 // Mise à jour de la position du joueur
 function updatePlayerPosition() {
   player.style.left = playerPos.x + 'px';

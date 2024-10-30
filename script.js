@@ -10,7 +10,7 @@ let playerPos = { x: 50, y: 50 };
 let monsterPos = { x: 700, y: 500 };
 let score = 0;
 const playerSpeed = 10;
-const monsterSpeed = 2;
+const monsterSpeed = 1;
 const miniYaskoCount = 10;
 let miniYaskos = [];
 

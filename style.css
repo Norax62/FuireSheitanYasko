@@ -12,6 +12,7 @@ body, html {
   background-color: #222;
   color: white;
   font-family: Arial, sans-serif;
+  overflow: hidden; /* Empêche le défilement */
 }
 
 #start-screen {
@@ -26,13 +27,21 @@ body, html {
 
 #game-area {
   position: relative;
-  width: 90vw; /* Utilise 90% de la largeur de la fenêtre */
-  height: 90vh; /* Utilise 90% de la hauteur de la fenêtre */
-  max-width: 800px; /* Largeur maximum pour les écrans plus grands */
-  max-height: 600px; /* Hauteur maximum pour les écrans plus grands */
+  width: 90vw;
+  height: 90vh;
+  max-width: 800px;
+  max-height: 600px;
   background-color: #333;
   overflow: hidden;
   border: 2px solid #fff;
+}
+
+/* Réduire la taille sur les petits écrans */
+@media (max-width: 600px) {
+  #game-area {
+    width: 300px;
+    height: 400px;
+  }
 }
 
 #player, #monster, .mini-yasko {
@@ -62,7 +71,7 @@ body, html {
   background-size: cover;
   width: 30px;
   height: 30px;
-  border-radius: 50%; /* Facultatif, selon la forme de l'image */
+  border-radius: 50%;
 }
 
 #score-board {
@@ -72,4 +81,31 @@ body, html {
   color: white;
   font-size: 20px;
   z-index: 10;
+}
+
+/* Styles de la croix directionnelle */
+#controls {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1000;
+}
+
+#controls button {
+  background-color: #666;
+  color: white;
+  font-size: 24px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin: 2px;
+}
+
+.middle-controls {
+  display: flex;
+  gap: 5px;
 }

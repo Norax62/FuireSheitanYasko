@@ -4,6 +4,7 @@ const gameArea = document.getElementById('game-area');
 const startScreen = document.getElementById('start-screen');
 const startButton = document.getElementById('start-button');
 const scoreDisplay = document.getElementById('score');
+const controls = document.getElementById('controls'); // Croix directionnelle
 
 let playerPos = { x: 50, y: 50 };
 let monsterPos = { x: 700, y: 500 };
@@ -15,6 +16,16 @@ let miniYaskos = [];
 
 // Fonction pour démarrer le jeu
 startButton.addEventListener('click', startGame);
+
+// Détecter si on est sur mobile
+function isMobile() {
+  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+}
+
+// Afficher la croix directionnelle si on est sur mobile
+if (isMobile()) {
+  controls.style.display = 'flex';
+}
 
 // Création des mini Yaskos dans le jeu
 function createMiniYaskos() {
@@ -36,62 +47,27 @@ function startGame() {
   gameLoop();
 }
 
-// Mouvement du joueur
+// Mouvement du joueur avec le clavier
 document.addEventListener('keydown', (e) => {
   switch (e.key) {
-    case 'ArrowUp':
-      if (playerPos.y > 0) playerPos.y -= playerSpeed;
-      break;
-    case 'ArrowDown':
-      if (playerPos.y < gameArea.clientHeight - player.clientHeight) playerPos.y += playerSpeed;
-      break;
-    case 'ArrowLeft':
-      if (playerPos.x > 0) playerPos.x -= playerSpeed;
-      break;
-    case 'ArrowRight':
-      if (playerPos.x < gameArea.clientWidth - player.clientWidth) playerPos.x += playerSpeed;
-      break;
+    case 'ArrowUp': movePlayer(0, -playerSpeed); break;
+    case 'ArrowDown': movePlayer(0, playerSpeed); break;
+    case 'ArrowLeft': movePlayer(-playerSpeed, 0); break;
+    case 'ArrowRight': movePlayer(playerSpeed, 0); break;
   }
-  updatePlayerPosition();
   checkMiniYaskoCollision();
 });
 
-// Événements tactiles pour le contrôle du joueur
-gameArea.addEventListener('touchstart', (e) => {
-  const touch = e.touches[0];
-  handleTouch(touch);
-});
+// Gestion du déplacement depuis la croix directionnelle
+document.getElementById('up').addEventListener('click', () => movePlayer(0, -playerSpeed));
+document.getElementById('down').addEventListener('click', () => movePlayer(0, playerSpeed));
+document.getElementById('left').addEventListener('click', () => movePlayer(-playerSpeed, 0));
+document.getElementById('right').addEventListener('click', () => movePlayer(playerSpeed, 0));
 
-gameArea.addEventListener('touchmove', (e) => {
-  const touch = e.touches[0];
-  handleTouch(touch);
-});
-
-// Gérer le mouvement en fonction du toucher
-function handleTouch(touch) {
-  const rect = gameArea.getBoundingClientRect();
-  const touchX = touch.clientX - rect.left;
-  const touchY = touch.clientY - rect.top;
-
-  // Déterminer la direction du mouvement
-  if (touchY < playerPos.y) {
-    playerPos.y = Math.max(playerPos.y - playerSpeed, 0); // Aller en haut
-  } else if (touchY > playerPos.y + player.clientHeight) {
-    playerPos.y = Math.min(playerPos.y + playerSpeed, gameArea.clientHeight - player.clientHeight); // Aller en bas
-  }
-
-  if (touchX < playerPos.x) {
-    playerPos.x = Math.max(playerPos.x - playerSpeed, 0); // Aller à gauche
-  } else if (touchX > playerPos.x + player.clientWidth) {
-    playerPos.x = Math.min(playerPos.x + playerSpeed, gameArea.clientWidth - player.clientWidth); // Aller à droite
-  }
-
-  updatePlayerPosition();
-  checkMiniYaskoCollision();
-}
-
-// Mise à jour de la position du joueur
-function updatePlayerPosition() {
+// Fonction de déplacement générique
+function movePlayer(dx, dy) {
+  playerPos.x = Math.max(0, Math.min(gameArea.clientWidth - player.clientWidth, playerPos.x + dx));
+  playerPos.y = Math.max(0, Math.min(gameArea.clientHeight - player.clientHeight, playerPos.y + dy));
   player.style.left = playerPos.x + 'px';
   player.style.top = playerPos.y + 'px';
 }
@@ -156,6 +132,12 @@ function resetGame() {
   createMiniYaskos();
   updatePlayerPosition();
   moveMonsterTowardsPlayer();
+}
+
+// Mise à jour de la position du joueur
+function updatePlayerPosition() {
+  player.style.left = playerPos.x + 'px';
+  player.style.top = playerPos.y + 'px';
 }
 
 // Boucle de jeu pour déplacer le monstre
